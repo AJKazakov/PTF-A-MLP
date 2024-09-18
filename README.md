@@ -19,7 +19,7 @@ It includes scripts written in Python, Bash shell, and gnuplot.
 
 Requirements:
 ==============================================================
-1.	Requires Python and other dependencies listed in ./reqs/requirements.txt
+1.	Requires Python and other dependencies listed in ./requirements.txt
 2.	Requires gnuplot
 
 ----------------------------------
