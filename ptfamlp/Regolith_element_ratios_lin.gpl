@@ -1,0 +1,59 @@
+#!/bin/gnuplot
+# this script plots simple data CSV results
+#
+set datafile separator ','
+set term png size 1280, 720 font "Trebuchet MS,24"
+set output mapdir.plotfile
+set size .92, 1
+
+set style increment default
+set view map
+set style data lines
+set ztics border in scale 0,0 nomirror norotate
+set rtics axis in scale 0,0 nomirror norotate  autojustify
+set title type
+#set logscale cb
+set cblabel "Ratio to total"
+set cbrange [ 0.01 : 1.00 ] noreverse nowriteback
+set palette defined (0 "black",1 "#040231",8 "#070349",15 "#0a0573",22 "#0712a8",29 "#0c5ac0",36 "#068bac",43 "#1fb5a9",50 "#3aa67b",57 "#88cf7d",63 "#ccff99",68 "#ffff99",\
+    72 "#ffcc66",78 "#ff8533",86 "#ff3333",91 "#ff66a3",95 "#ff99cc", 98 "#ffe6f7", 100 "white")
+set grid xtics ytics	# draw lines for each xtics and ytics
+
+# Draw the map axes manually
+Xmin = -0.5            # range in x
+Xmax =  35.5
+Ymin = -0.5            # range in y
+Ymax =  17.5
+
+NXtics = 36              # number of Xtics
+NYtics = 18              # number of Ytics
+
+epsX = 0.05             # length of Xtics
+epsY = 0.03             # length of Ytics
+
+dX = (Xmax-Xmin)/NXtics     # distance between Xtics
+dY = (Ymax-Ymin)/NYtics     # distance between Ytics
+
+# xtics and x2tics
+do for [i=0:NXtics] {
+  posX = Xmin+i*dX
+  set arrow from posX,Ymin-epsY to posX,Ymin+epsY nohead front    # bottom
+  set arrow from posX,Ymax-epsY to posX,Ymax+epsY nohead front    # top
+}
+
+# ytics and y2tics
+do for [i=0:NYtics] {
+  posY = Ymin+i*dY
+  set arrow from Xmin-epsX,posY to Xmin+epsX,posY nohead front    # left
+  set arrow from Xmax-epsX,posY to Xmax+epsX,posY nohead front    # right
+}
+
+set xtics ("0" -0.5, "30" 2.5, "60" 5.5, "90" 8.5, "120" 11.5, "150" 14.5, "180" 17.5, "210" 20.5, "240" 23.5, "270" 26.5, "300" 29.5, "330" 32.5, "360" 35.5) scale 0 offset 0,-epsY
+set ytics ("-90" -0.5, "-60" 2.5, "-30" 5.5, "0" 8.5, "30" 11.5, "60" 14.5, "90" 17.5) scale 0 offset -epsX,0
+
+set xrange [Xmin:Xmax] noreverse nowriteback
+set yrange [Ymin:Ymax] noreverse nowriteback
+
+set pm3d map
+set pm3d interpolate 4,4
+splot mapdir.mapfile matrix with image
